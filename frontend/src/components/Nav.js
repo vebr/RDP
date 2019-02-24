@@ -33,8 +33,10 @@ class TopNavUser extends Component {
             <Nav className="ml-auto" navbar>
               <Navs link="/" name="Home"/>
               <Navs link="/profile" name="Profile"/>
-               <NavItem onClick={this.props.logout} className="nav-link">
+               <NavItem onClick={this.props.logout}>
+                <NavLink exact to="/logout" className="nav-link">
                 Logout
+                </NavLink>
                </NavItem>        
             </Nav>
         )

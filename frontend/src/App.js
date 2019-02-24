@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { JumbotronHome } from './components/Jumbotron';
+import JumbotronHome from './components/Jumbotron';
 import { Container } from 'reactstrap';
 import {TopNavGuest,TopNavUser} from './components/Nav';
 import Footer from './components/Footer';
@@ -8,7 +8,6 @@ import LoginPage from "./components/Login"
 import SignUpPage from "./components/Signup" 
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import { Collapse, Navbar, NavbarToggler, NavbarBrand} from 'reactstrap';
-
 
 function Navigation(props) {
   const logged_out_nav = (
@@ -43,7 +42,7 @@ class App extends Component {
 
   componentDidMount() {
     if (this.state.logged_in) {
-      fetch('http://localhost:8000/core/current_user/', {
+      fetch('http://192.168.88.30:8000/core/current_user/', {
         headers: {
           Authorization: `JWT ${localStorage.getItem('token')}`
         }
@@ -57,7 +56,7 @@ class App extends Component {
 
   handle_login = (e, data) => {
     e.preventDefault();
-    fetch('http://localhost:8000/token-auth/', {
+    fetch('http://192.168.88.30:8000/token-auth/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -71,10 +70,18 @@ class App extends Component {
           this.setState({
           error_login: false,
           logged_in: true,
-          login_success: true,
           displayed_form: '',
-          username: json.user.username
+          username: json.user.username,
+          login_success: true
           });
+          setTimeout(
+            function() {
+                this.setState({login_success: false});
+            }
+            .bind(this),
+            3000
+        );
+          // this.props.history.push('/users');
         } else {
           this.setState({
             error_login: true,
@@ -85,7 +92,7 @@ class App extends Component {
 
   handle_signup = (e, data) => {
     e.preventDefault();
-    fetch('http://localhost:8000/core/users/', {
+    fetch('http://192.168.88.30:8000/core/users/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -97,7 +104,6 @@ class App extends Component {
         localStorage.setItem('token', json.token);
         this.setState({
           logged_in: true,
-          loggin_success: true,
           displayed_form: '',
           username: json.username
         });
@@ -111,13 +117,13 @@ class App extends Component {
   
   display_form = form => {
     this.setState({
-      displayed_form: form
+      displayed_form: form,
     });
   };
 
 
   render() {
-     return (
+    return (
      <div className="content">
       <Router>
         <Navbar light expand="sm" className="top mb-3 navbar navbar-dark bg-dark">
@@ -131,15 +137,14 @@ class App extends Component {
             />
         </Navbar>
           <Container>
-          <h3>
-          {this.state.logged_in
-            ? `Hello, ${this.state.username}`
-            : 'Please Log In'}
-        </h3>
-              <Route exact path="/" component={JumbotronHome} />
+              <Route exact path="/"
+              render={(props) =>
+                <JumbotronHome {...props} login_success={this.state.login_success}/>
+              }
+              />
               <Route path="/login"
                 render={(props) =>
-                  <LoginPage {...props} login_success={this.state.login_success} error_login={this.state.error_login} handle_login={this.handle_login}/>}
+                  <LoginPage {...props} login_success={this.state.logged_in} error_login={this.state.error_login} handle_login={this.handle_login}/>}
               />
               <Route path="/signup"
                 render={(props) =>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button,Col, Form, FormGroup, Label, Input , Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 // import axios from "axios";
 // import style from '../css/style.less';
 
@@ -16,21 +17,6 @@ function WarningBanner(props) {
         The username and password you entered did not match our records. Please check and try again.
       </Alert>
     );
-  }
-}
-
-function LoginSuccess(props) {
-  console.log(props.success);
-  if (props.success === false) {
-    return (
-      <div></div>
-    )
-  } else {
-    return (
-      <Alert color="success">
-        Login success!
-      </Alert>
-    )
   }
 }
 
@@ -52,6 +38,11 @@ class LoginPage extends Component {
   };
 
   render() {
+
+    if (this.props.login_success === true) {
+      return <Redirect to="/" />
+     }
+
     return (
       <div className="row ">
         <Col sm={8} xl={4} className="container">
@@ -60,9 +51,6 @@ class LoginPage extends Component {
         <FormGroup row>
           <Col sm={12}>
             <WarningBanner warn={this.props.error_login} />        
-          </Col>
-          <Col sm={12}>
-            <LoginSuccess success={this.props.login_success} />        
           </Col>
         <Label for="username" sm={12}>Username</Label>
           <Col sm={12}>
