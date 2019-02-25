@@ -38,9 +38,15 @@ class LoginPage extends Component {
   };
 
   render() {
-
+    let logout;
     if (this.props.login_success === true) {
-      return <Redirect to="/" />
+      return <Redirect to="/dashboard" />
+     }
+    
+    if (this.props.log_out === true) {
+      logout = <Alert color="success">
+                  Logged out success, please login back if you forgot something behind.
+               </Alert>
      }
 
     return (
@@ -50,7 +56,8 @@ class LoginPage extends Component {
         <Form onSubmit={e => this.props.handle_login(e, this.state)}>
         <FormGroup row>
           <Col sm={12}>
-            <WarningBanner warn={this.props.error_login} />        
+            <WarningBanner warn={this.props.error_login} />
+            { logout }       
           </Col>
         <Label for="username" sm={12}>Username</Label>
           <Col sm={12}>

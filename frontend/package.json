@@ -45,6 +45,7 @@
     "react-app-polyfill": "^0.2.1",
     "react-dev-utils": "^7.0.3",
     "react-dom": "^16.8.2",
+    "react-form-validator-core": "^0.6.1",
     "react-router-dom": "^4.4.0-beta.6",
     "reactstrap": "^7.1.0",
     "resolve": "1.10.0",
